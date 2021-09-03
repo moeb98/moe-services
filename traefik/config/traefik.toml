@@ -1,0 +1,35 @@
+[log]
+  level = "ERROR"
+  filePath = "/srv/docker/traefik/traefik.log"
+  format = "json"
+
+# comment in, if you wanna see access logs, too...
+ [accessLog]
+   filePath = "/srv/docker/traefik/access.log"
+   format = "json"
+
+[providers]
+  [providers.docker]
+    exposedByDefault = false
+    endpoint = "unix:///var/run/docker.sock"
+    network = "traefik_proxy"
+  [providers.file]
+    filename = "/etc/traefik/dynamic.yml"
+
+[api]
+  dashboard = true
+
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+  [entryPoints.web-secure]
+    address = ":443"
+  [entryPoints.dashboard]
+    address = ":8080"
+
+[certificatesResolvers]
+  [certificatesResolvers.default.acme]
+    email = "moeb98@yahoo.de"
+#    email = "${ACME_EMAIL}"
+    storage = "/etc/traefik/acme.json"
+    [certificatesResolvers.default.acme.tlsChallenge]

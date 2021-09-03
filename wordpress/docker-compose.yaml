@@ -1,0 +1,52 @@
+---
+version: '3.3'
+
+services:
+  wordpress-db:
+    image: mariadb:latest
+    container_name: wordpress-db
+    restart: always
+    volumes:
+      - /srv/wordpress/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${WORDPRESS_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${WORDPRESS_DB_NAME}
+      - MYSQL_USER=${WORDPRESS_DB_USER}
+      - MYSQL_PASSWORD=${WORDPRESS_DB_PASSWORD}
+    networks:
+      - backend
+
+  wordpress-app:
+    image: wordpress:latest
+    container_name: wordpress-app
+    depends_on:
+      - wordpress-db
+    restart: always
+    volumes:
+      - /srv/wordpress/wp-content:/var/www/html/wp-content
+      - /srv/wordpress/me-doc:/var/www/html/me-doc
+    environment:
+      - WORDPRESS_DB_HOST=wordpress-db:3306
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+      - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+    ports:
+      - 80:80 
+    labels:
+      - "traefik.enable=false"
+      - "traefik.http.routers.wp.entrypoints=web-secure"
+      - "traefik.http.routers.wp.rule=Host(`${TLD}`) || Host(`${SD}`)"
+      - "traefik.http.routers.wp.tls=true"
+      - "traefik.http.routers.wp.tls.certresolver=default"
+      - "traefik.http.services.wp.loadbalancer.server.port=80"
+    networks:
+      - backend
+      - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external:
+      name: traefik_proxy
+  backend:
+    external:
+      name: backend
