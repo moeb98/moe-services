@@ -1,0 +1,89 @@
+---
+version: '3.3'
+
+services:
+  nextcloud-db:
+    image: mariadb:latest
+    container_name: nextcloud-db
+    restart: unless-stopped
+    volumes:
+      - /srv/nextcloud/db:/var/lib/mysql
+      - ./config:/etc/mysql/conf.d
+    environment:
+      - TZ=Europe/Berlin
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${NEXTCLOUD_DB_NAME}
+      - MYSQL_USER=${NEXTCLOUD_DB_USER}
+      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
+    # innodb format
+    # command: mysqld --innodb-large-prefix=true --innodb-file-format=barracuda
+    #          --innodb-file-per-table=1
+
+    networks:
+      - backend
+
+  nextcloud-app:
+    image: nextcloud:stable
+    container_name: nextcloud-app
+    restart: unless-stopped
+    volumes:
+      - /srv/nextcloud/app:/var/www/html
+      - /srv/nextcloud/nas:/var/www/html/data
+    depends_on:
+      - nextcloud-db
+    ports:
+      - 80:80
+    environment:
+      - OVERWRITEPROTOCOL=https
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.entrypoints=web-secure"
+      - "traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_DOMAIN}`)"
+      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.tls.certresolver=default"
+      # HSTS headers to meet SSL security recommendations for nextcloud
+      - "traefik.http.routers.nextcloud.middlewares=nc-hsts, nc-redirect"
+      - "traefik.http.middlewares.nc-hsts.headers.stsSeconds=15552000"
+      - "traefik.http.middlewares.nc-hsts.headers.stsPreload=true"
+      - "traefik.http.middlewares.nc-hsts.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.nc-hsts.headers.forceSTSHeader=true"
+      # add 'well-known' redirection for caldav and carddav
+      - "traefik.http.middlewares.nc-redirect.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav"
+      - "traefik.http.middlewares.nc-redirect.redirectregex.replacement=https://$$1/remote.php/dav/"
+      - "traefik.http.middlewares.nc-redirect.redirectregex.permanent=true"
+
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+
+    networks:
+      - traefik_proxy
+      - backend
+
+  coturn:
+    image: killua99/coturn
+    container_name: nextcloud-turn
+    restart: unless-stopped
+    ports:
+      - "3478:3478"
+
+    command: turnserver --log-file=stdout --external-ip=$$(detect-external-ip)
+             --realm=${NEXTCLOUD_DOMAIN} --total-quota=1000 --bps-capacity=0
+             --stale-nonce --no-multicast-peers
+             --listening-port=3478 --fingerprint
+             --use-auth-secret --static-auth-secret=${COTURN_AUTH_SECRET}
+             --log-file=/var/log/turnserver.log --verbose
+    volumes:
+      - /srv/nextcloud/log:/var/log
+
+    networks:
+      - traefik_proxy
+      - backend
+
+networks:
+  traefik_proxy:
+    external:
+      name: traefik_proxy
+  backend:
+    external:
+      name: backend
