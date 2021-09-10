@@ -33,8 +33,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime
       - "./config:/etc/traefik"
-      - /srv/docker/traefik/access.log:/srv/docker/traefik/access.log
-      - /srv/docker/traefik/traefik.log:/srv/docker/traefik/traefik.log
+      - /srv/traefik/access.log:/srv/traefik/access.log
+      - /srv/traefik/traefik.log:/srv/traefik/traefik.log
 
     labels:
       - "traefik.enable=true"

@@ -1,11 +1,11 @@
 [log]
-  level = "ERROR"
-  filePath = "/srv/docker/traefik/traefik.log"
+  level = "DEBUG"
+  filePath = "/srv/traefik/traefik.log"
   format = "json"
 
 # comment in, if you wanna see access logs, too...
  [accessLog]
-   filePath = "/srv/docker/traefik/access.log"
+   filePath = "/srv/traefik/access.log"
    format = "json"
 
 [providers]
@@ -32,4 +32,5 @@
     email = "moeb98@yahoo.de"
 #    email = "${ACME_EMAIL}"
     storage = "/etc/traefik/acme.json"
+#    caserver = "https://acme-staging-v02.api.letsencrypt.org/directory"
     [certificatesResolvers.default.acme.tlsChallenge]

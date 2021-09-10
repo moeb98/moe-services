@@ -33,8 +33,6 @@ services:
       - /srv/nextcloud/nas:/var/www/html/data
     depends_on:
       - nextcloud-db
-    ports:
-      - 80:80
     environment:
       - OVERWRITEPROTOCOL=https
     labels:
