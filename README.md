@@ -28,7 +28,7 @@ In alphabetical order
 
 ### V
 
-* Vaultwarde - <https://github.com/dani-garcia/vaultwarden>
+* Vaultwarden - <https://github.com/dani-garcia/vaultwarden>
 
 ### W
 
