@@ -59,7 +59,7 @@ services:
       - backend
 
   coturn:
-    image: killua99/coturn
+    image: coturn/coturn
     container_name: nextcloud-turn
     restart: unless-stopped
     ports:
