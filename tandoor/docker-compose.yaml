@@ -50,9 +50,9 @@ services:
 
 networks:
   default:
-#     external:
-#       name: backend
-  traefik_proxy: 
+  #     external:
+  #       name: backend
+  traefik_proxy:
     external:
       name: traefik_proxy
 
