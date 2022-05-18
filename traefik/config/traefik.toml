@@ -1,5 +1,5 @@
 [log]
-  level = "DEBUG"
+  level = "ERROR"
   filePath = "/srv/traefik/traefik.log"
   format = "json"
 
@@ -17,7 +17,7 @@
     filename = "/etc/traefik/dynamic.yml"
 
 [api]
-  dashboard = true
+  dashboard = false
 
 [entryPoints]
   [entryPoints.web]

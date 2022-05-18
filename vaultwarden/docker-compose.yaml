@@ -37,7 +37,7 @@ services:
       - "traefik.http.routers.vaultwarden-websocket.rule=
          Host(`${BITWARDEN_DOMAIN}`) && Path(`/notifications/hub`)"
       - "traefik.http.routers.vaultwarden-websocket.tls=true"
-      - "traefik.http.routers.vaultwarden-websocket.service=bitwarden-websocket"
+      - "traefik.http.routers.vaultwarden-websocket.service=vaultwarden-websocket"
       - "traefik.http.services.vaultwarden-websocket.loadbalancer.server.port=3012"
 
     networks:
