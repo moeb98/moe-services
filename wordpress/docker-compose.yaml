@@ -34,7 +34,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wp.entrypoints=web-secure"
-      - "traefik.http.routers.wp.rule=Host(`${TLD}`) || Host(`${SD}`) || Host(`${ALTTLD}`)"
+      - "traefik.http.routers.wp.rule=
+         Host(`${TLD}`) || Host(`${SD}`) || Host(`${ALTTLD}`)"
       - "traefik.http.routers.wp.tls=true"
       - "traefik.http.routers.wp.tls.certresolver=default"
       - "traefik.http.services.wp.loadbalancer.server.port=80"
