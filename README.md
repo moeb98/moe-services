@@ -9,6 +9,10 @@ corresponding docker-compose files. All services are aimed at arm64 environment.
 
 In alphabetical order
 
+### C
+
+* Calibre - <https://calibre-ebook.com/>
+
 ### N
 
 * Nextcloud - <https://nextcloud.com>
