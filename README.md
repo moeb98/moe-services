@@ -16,6 +16,7 @@ In alphabetical order
 ### N
 
 * Nextcloud - <https://nextcloud.com>
+* nginx - <https://nginx.org/>
 
 ### O
 
