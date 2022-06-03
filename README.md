@@ -28,6 +28,7 @@ In alphabetical order
 
 ### T
 
+* Tandoor - <https://docs.tandoor.dev/>
 * Traefik - <https://traefik.io>
 * TURN Server for Nextcloud
 
