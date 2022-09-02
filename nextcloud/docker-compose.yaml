@@ -78,6 +78,18 @@ services:
       - traefik_proxy
       - backend
 
+  phpmyadmin:
+    image: linuxserver/phpmyadmin
+    container_name: pma
+    environment:
+      PMA_ARBITRARY: 1
+    restart: unless-stopped
+    ports:
+      - 4321:80
+    networks:
+      - backend
+      - traefik_proxy
+
 networks:
   traefik_proxy:
     external:
