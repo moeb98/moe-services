@@ -1,0 +1,30 @@
+---
+version: '3'
+
+services:
+  traccar:
+    image: mrmoe/moe-traccar:latest
+    restart: unless-stopped
+    ports:
+      - "4000-4150:5000-5150"
+      - "4000-4150:5000-5150/udp"
+    volumes:
+      - "./logs:/opt/traccar/logs:rw"
+      - "./data:/opt/traccar/data:rw"
+      - "./conf/traccar.xml:/opt/traccar/conf/traccar.xml:rw"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traccar.entrypoints=web-secure"
+      - "traefik.http.routers.traccar.rule=Host(`${TRACCAR_DOMAIN}`)"
+      - "traefik.http.routers.traccar.tls=true"
+      - "traefik.http.routers.traccar.tls.certresolver=default"
+      - "traefik.http.services.traccar.loadbalancer.server.port=8082"
+
+    networks:
+      - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external:
+      name: traefik_proxy
+

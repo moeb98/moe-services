@@ -3,3 +3,5 @@ acme.json
 targets.yml
 **/scripts/
 **/data/
+**/logs/
+traccar.xml
