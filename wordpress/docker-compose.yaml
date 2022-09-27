@@ -43,10 +43,15 @@ services:
          Host(`${TLD}`) || Host(`${SD}`) || Host(`${ALTTLD}`)"
       - "traefik.http.routers.wp.tls=true"
       - "traefik.http.routers.wp.tls.certresolver=default"
-      - "traefik.http.routers.wp.middlewares=security-headers, wp-security-headers"
-      - "traefik.http.middlewares.wp-security-headers.headers.contentsecuritypolicy=
-         default-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';
-         img-src 'self' https://cdn.shortpixel.ai https://me-photography.spdns.org https://eberlein.tk https://ps.w.org data:;
+      - "traefik.http.routers.wp.middlewares=
+         security-headers, wp-sec-headers"
+      - "traefik.http.middlewares.wp-sec-headers.headers.contentsecuritypolicy=
+         default-src 'none';
+         frame-ancestors 'self';
+         base-uri 'self';
+         form-action 'self';
+         img-src 'self' https://cdn.shortpixel.ai 
+         https://me-photography.spdns.org https://eberlein.tk https://ps.w.org data:;
          script-src 'self' 'unsafe-inline' 'unsafe-eval';
          style-src 'self' 'unsafe-inline' fonts.googleapis.com;
          font-src 'self' https://fonts.gstatic.com;"
