@@ -56,6 +56,28 @@ services:
       # middleware redirect
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
+      # security header middleware
+      - traefik.http.middlewares.security-headers.headers.accesscontrolallowmethods=
+        GET, OPTIONS, PUT
+      - traefik.http.middlewares.security-headers.headers.accesscontrolmaxage=100
+      - traefik.http.middlewares.security-headers.headers.addvaryheader=true
+      - traefik.http.middlewares.security-headers.headers.hostsproxyheaders=X-Forwarded-Host
+      - traefik.http.middlewares.security-headers.headers.sslredirect=true
+      - traefik.http.middlewares.security-headers.headers.sslproxyheaders.X-Forwarded-Proto=https
+      - traefik.http.middlewares.security-headers.headers.stsseconds=63072000
+      - traefik.http.middlewares.security-headers.headers.stsincludesubdomains=true
+      - traefik.http.middlewares.security-headers.headers.stspreload=true
+      - traefik.http.middlewares.security-headers.headers.forcestsheader=true
+      - traefik.http.middlewares.security-headers.headers.customFrameOptionsValue=sameorigin
+      - traefik.http.middlewares.security-headers.headers.contenttypenosniff=true
+      - traefik.http.middlewares.security-headers.headers.browserxssfilter=true
+      - traefik.http.middlewares.security-headers.headers.referrerpolicy=same-origin
+      # - traefik.http.middlewares.security-headers.headers.featurepolicy=
+      #   camera 'none'; geolocation 'none'; microphone 'none'; payment 'none';
+      #   usb 'none'; vr 'none';
+      - traefik.http.middlewares.security-headers.headers.customresponseheaders.X-Robots-Tag=
+        none,noarchive,nosnippet,notranslate,noimageindex
+
       # loadbalancer service
       - "traefik.http.services.traefik.loadbalancer.server.port=80"
 
