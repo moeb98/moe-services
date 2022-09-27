@@ -24,15 +24,18 @@ services:
     depends_on:
       - wordpress-db
     restart: always
+
     volumes:
       - /srv/wordpress/wp-content:/var/www/html/wp-content
       - /srv/wordpress/me-doc:/var/www/html/me-doc
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+
     environment:
       - WORDPRESS_DB_HOST=wordpress-db:3306
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wp.entrypoints=web-secure"
@@ -40,7 +43,15 @@ services:
          Host(`${TLD}`) || Host(`${SD}`) || Host(`${ALTTLD}`)"
       - "traefik.http.routers.wp.tls=true"
       - "traefik.http.routers.wp.tls.certresolver=default"
+      - "traefik.http.routers.wp.middlewares=security-headers, wp-security-headers"
+      - "traefik.http.middlewares.wp-security-headers.headers.contentsecuritypolicy=
+         default-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';
+         img-src 'self' https://cdn.shortpixel.ai https://me-photography.spdns.org https://eberlein.tk https://ps.w.org data:;
+         script-src 'self' 'unsafe-inline' 'unsafe-eval';
+         style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+         font-src 'self' https://fonts.gstatic.com;"
       - "traefik.http.services.wp.loadbalancer.server.port=80"
+
     networks:
       - backend
       - traefik_proxy
