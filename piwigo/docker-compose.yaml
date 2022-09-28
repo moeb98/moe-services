@@ -18,7 +18,7 @@ services:
       - backend
 
   piwigo-app:
-    image: linuxserver/piwigo
+    image: linuxserver/piwigo:latest
     container_name: piwigo-app
     restart: unless-stopped
     volumes:
@@ -36,6 +36,7 @@ services:
       - "traefik.http.routers.piwigo.rule=Host(`${PIWIGO_DOMAIN}`)"
       - "traefik.http.routers.piwigo.tls=true"
       - "traefik.http.routers.piwigo.tls.certresolver=default"
+      - "traefik.http.routers.piwigo.middlewares=security-headers"
       - "traefik.http.services.piwigo.loadbalancer.server.port=80"
 
     networks:
