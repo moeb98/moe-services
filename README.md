@@ -24,6 +24,7 @@ In alphabetical order
 
 ### P
 
+* Piwigo - <https://www.piwigo.org/>
 * Portainer - <https://www.portainer.io>
 
 ### T
