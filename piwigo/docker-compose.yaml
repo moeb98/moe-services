@@ -13,6 +13,7 @@ services:
       - MYSQL_DATABASE=${PIWIGO_DB_NAME}
       - MYSQL_USER=${PIWIGO_DB_USER}
       - MYSQL_PASSWORD=${PIWIGO_DB_PASSWORD}
+      - MARIADB_AUTO_UPGRADE=1
 
     networks:
       - backend

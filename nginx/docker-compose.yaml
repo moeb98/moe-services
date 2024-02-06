@@ -6,8 +6,8 @@ services:
   web-app:
     image: nginx
     container_name: nginx
-    depends_on:
-      - php
+#    depends_on:
+#      - php
     restart: unless-stopped
     volumes:
       - /srv/web:/usr/share/nginx/html
