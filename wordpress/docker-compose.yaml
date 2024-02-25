@@ -3,16 +3,19 @@ version: '3.3'
 
 services:
   wordpress-db:
-    image: mariadb:latest
+    image: mariadb:11.2.2
     container_name: wordpress-db
     restart: always
+#    command: --default-authentication-plugin=mysql_native_password
     volumes:
       - /srv/wordpress/db:/var/lib/mysql
+#      - ./my-resolve.cnf:/etc/mysql/conf.d/my-resolve.cnf:ro
     environment:
       - MYSQL_ROOT_PASSWORD=${WORDPRESS_DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=${WORDPRESS_DB_NAME}
       - MYSQL_USER=${WORDPRESS_DB_USER}
       - MYSQL_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - MARIADB_AUTO_UPGRADE=1
     networks:
       - backend
     # in case of db inconsistencies after e.g. power outage
@@ -44,7 +47,7 @@ services:
       - "traefik.http.routers.wp.tls=true"
       - "traefik.http.routers.wp.tls.certresolver=default"
       - "traefik.http.routers.wp.middlewares=
-	  security-headers"
+         security-headers"
 #      - "traefik.http.middlewares.wp-sec-headers.headers.contentsecuritypolicy=
 #         default-src 'none';
 #         frame-ancestors 'self';

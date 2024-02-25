@@ -3,7 +3,7 @@ version: '3.3'
 
 services:
   piwigo-db:
-    image: mariadb:latest
+    image: mariadb:11.2.2
     container_name: piwigo-db
     restart: unless-stopped
     volumes:
