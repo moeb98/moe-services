@@ -1,5 +1,4 @@
 ---
-version: '3'
 
 services:
   traefik:
@@ -90,5 +89,4 @@ services:
 
 networks:
   traefik_proxy:
-    external:
-      name: traefik_proxy
+    external: true
