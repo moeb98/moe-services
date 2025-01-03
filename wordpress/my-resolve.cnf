@@ -1,3 +1,0 @@
-[mariadb]
-disable-skip-name-resolve=1
-host-cache-size=1

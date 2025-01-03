@@ -4,16 +4,17 @@ version: "3.3"
 services:
   db_recipes:
     restart: unless-stopped
-    image: postgres:11-alpine
+    image: postgres:16-alpine
     volumes:
       - /srv/tandoor/postgresql:/var/lib/postgresql/data
     env_file:
       - ./.env
     networks:
-      - default
+      - backend
 
   web_recipes:
-    image: vabene1111/recipes
+    image: vabene1111/recipes:latest
+
     restart: unless-stopped
     env_file:
       - ./.env
@@ -24,7 +25,7 @@ services:
     depends_on:
       - db_recipes
     networks:
-      - default
+      - backend
 
   nginx_recipes:
     image: nginx:mainline-alpine
@@ -33,8 +34,8 @@ services:
       - ./.env
     volumes:
       - nginx_config:/etc/nginx/conf.d:ro
-      - staticfiles:/recipes/static
-      - /srv/tandoor/mediafiles:/media
+      - staticfiles:/static:ro
+      - /srv/tandoor/mediafiles:/media/recipes:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tandoor.entrypoints=web-secure"
@@ -46,13 +47,13 @@ services:
     depends_on:
       - web_recipes
     networks:
-      - default
+      - backend
       - traefik_proxy
 
 networks:
-  default:
-  #     external:
-  #       name: backend
+  backend:
+    external:
+      name: backend
   traefik_proxy:
     external:
       name: traefik_proxy
