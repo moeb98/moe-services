@@ -10,7 +10,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/docker/portainer:/data
-    command: --admin-password="${ADMIN_PASSWD}"
+    command: --admin-password=${ADMIN_PASSWD}
     restart: always
 
 # Comment in, if you wanna proxy portainer via traefik
