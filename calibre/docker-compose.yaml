@@ -1,5 +1,4 @@
 ---
-version: "3"
 services:
   calibre-web:
     image: ghcr.io/linuxserver/calibre-web
@@ -25,11 +24,11 @@ services:
       - "traefik.http.routers.calibre.middlewares=secHeaders@file"
       - "traefik.http.services.calibre.loadbalancer.server.port=8083"
     networks:
+# comment in, if should be accessible from outside your LAN
 #      - traefik_proxy
       - default
 
 networks:
   traefik_proxy:
-    external:
-      name: traefik_proxy
+    external: true
   default:
