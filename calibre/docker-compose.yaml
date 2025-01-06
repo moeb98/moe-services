@@ -24,8 +24,8 @@ services:
       - "traefik.http.routers.calibre.middlewares=secHeaders@file"
       - "traefik.http.services.calibre.loadbalancer.server.port=8083"
     networks:
-#      comment in, if should be accessible from outside your LAN
-#      - traefik_proxy
+      # comment in, if should be accessible from outside your LAN
+      # - traefik_proxy
       - default
 
 networks:
