@@ -1,5 +1,4 @@
 ---
-version: '3.3'
 
 services:
   piwigo-db:
@@ -46,8 +45,6 @@ services:
 
 networks:
   traefik_proxy:
-    external:
-      name: traefik_proxy
+    external: true
   backend:
-    external:
-      name: backend
+    external: true
