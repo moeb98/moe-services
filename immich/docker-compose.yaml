@@ -24,6 +24,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env
+    environment:
+      IMMICH_WORKERS_INCLUDE: 'api'
     # ports:
     #   - 2283:3001
     depends_on:
@@ -40,6 +42,39 @@ services:
       - "traefik.http.services.photo-app.loadbalancer.server.port=2283"
     healthcheck:
       disable: false
+    networks:
+      - backend
+      - traefik_proxy
+
+  immich-microservices:
+    container_name: immich_microservices
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    # extends:
+    #   file: hwaccel.transcoding.yml
+    #   service: cpu # set to one of
+    # [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
+    volumes:
+      # Do not edit the next line. If you want to change the media storage
+      # location on your system, edit the value of UPLOAD_LOCATION .env
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      IMMICH_WORKERS_EXCLUDE: 'api'
+    depends_on:
+      - redis
+      - database
+    restart: always
+    healthcheck:
+      disable: false
+#    deploy:
+#      resources:
+#        limits:
+          # Number of CPU threads
+#          cpus: '1.00'
+          # Gigabytes of memory
+#          memory: '2G'
     networks:
       - backend
       - traefik_proxy
@@ -64,6 +99,13 @@ services:
       - backend
     healthcheck:
       disable: false
+#    deploy:
+#      resources:
+#        limits:
+          # Number of CPU threads
+#          cpus: '1.00'
+          # Gigabytes of memory
+#          memory: '2G'
 
   redis:
     container_name: immich_redis

@@ -1,0 +1,166 @@
+---
+services:
+  dawarich_redis:
+    image: redis:7.0-alpine
+    container_name: dawarich_redis
+    command: redis-server
+    networks:
+      - backend
+    volumes:
+      - /srv/dawarich/shared:/data
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+  dawarich_db:
+    image: postgis/postgis:17-3.5-alpine
+    shm_size: 1G
+    container_name: dawarich_db
+    volumes:
+      - /srv/dawarich/db_data:/var/lib/postgresql/data
+      - /srv/dawarich/shared:/var/shared
+      # Optional, uncomment if you want to use a custom config
+      # - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - backend
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    restart: always
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U ${DB_USER} -d dawarich_development"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    # Use custom config, uncomment if you want to use a custom config
+    # command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  dawarich_app:
+    image: freikin/dawarich:latest
+    container_name: dawarich_app
+    volumes:
+      - /srv/dawarich/public:/var/app/public
+      - /srv/dawarich/watched:/var/app/tmp/imports/watched
+      - /srv/dawarich/storage:/var/app/storage
+    networks:
+      - backend
+    ports:
+      - 3000:3000
+      # - 9394:9394 # Prometheus exporter, uncomment if needed
+    stdin_open: true
+    tty: true
+    entrypoint: web-entrypoint.sh
+    command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
+    restart: on-failure
+    environment:
+      SELF_HOSTED: "true"
+      RAILS_ENV: development
+      REDIS_URL: redis://dawarich_redis:6379/0
+      DATABASE_HOST: dawarich_db
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
+      DATABASE_NAME: dawarich_development
+      MIN_MINUTES_SPENT_IN_CITY: 60
+      APPLICATION_HOSTS: localhost
+      TIME_ZONE: Europe/London
+      APPLICATION_PROTOCOL: http
+      PHOTON_API_HOST: 192.168.1.4:2322
+      DISTANCE_UNIT: km
+      PROMETHEUS_EXPORTER_ENABLED: false
+      PROMETHEUS_EXPORTER_HOST: 0.0.0.0
+      PROMETHEUS_EXPORTER_PORT: 9394
+      ENABLE_TELEMETRY: false
+      # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    healthcheck:
+      test:
+        ["CMD-SHELL", "wget -qO - ${URL} | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1.0'    # Limit CPU usage to 50% of one core
+#          memory: '4G'    # Limit memory usage to 4GB
+  dawarich_sidekiq:
+    image: freikin/dawarich:latest
+    container_name: dawarich_sidekiq
+    volumes:
+      - /srv/dawarich/public:/var/app/public
+      - /srv/dawarich/watched:/var/app/tmp/imports/watched
+      - /srv/dawarich/storage:/var/app/storage
+    networks:
+      - backend
+    stdin_open: true
+    tty: true
+    entrypoint: sidekiq-entrypoint.sh
+    command: ['sidekiq']
+    restart: on-failure
+    environment:
+      SELF_HOSTED: "true"
+      RAILS_ENV: development
+      REDIS_URL: redis://dawarich_redis:6379/0
+      DATABASE_HOST: dawarich_db
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
+      DATABASE_NAME: dawarich_development
+      APPLICATION_HOSTS: localhost
+      BACKGROUND_PROCESSING_CONCURRENCY: 10
+      APPLICATION_PROTOCOL: http
+      PHOTON_API_HOST: 192.168.1.4:2322
+      # PHOTON_API_HOST: photon.komoot.io
+      DISTANCE_UNIT: km
+      PROMETHEUS_EXPORTER_ENABLED: false
+      PROMETHEUS_EXPORTER_HOST: dawarich_app
+      PROMETHEUS_EXPORTER_PORT: 9394
+      ENABLE_TELEMETRY: false
+      # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    healthcheck:
+      test:
+        ["CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+      dawarich_app:
+        condition: service_healthy
+        restart: true
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1.0'    # Limit CPU usage to 50% of one core
+#          memory: '4G'    # Limit memory usage to 4GB
+
+networks:
+  backend:
+    external: true

@@ -34,13 +34,14 @@ services:
       - /srv/nextcloud/data:/var/www/html/data
     depends_on:
       - nextcloud-db
+      - redis
     environment:
       - OVERWRITEPROTOCOL=https
       - OVERWRITECLIURL=${OVERWRITECLIURL}
       - OVERWRITEHOST=${NEXTCLOUD_DOMAIN}
       - TRUSTED_PROXIES=${REVERSE_PROXY}
-#      - REDIS_HOST=redis
-#      - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_HOST=redis
+      # - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud.entrypoints=web-secure"
@@ -65,12 +66,12 @@ services:
       - traefik_proxy
       - backend
 
-#  redis:
-#    image: redis
-#    command: redis-server --requirepass ${REDIS_PASSWORD}
-#    restart: always
-#    networks:
-#      - backend
+  redis:
+    image: redis
+    # command: redis-server --requirepass "${REDIS_PASSWORD}"
+    restart: always
+    networks:
+      - traefik_proxy
 
   coturn:
     image: coturn/coturn
