@@ -83,7 +83,7 @@ services:
         max-file: "5"
     healthcheck:
       test:
-        ["CMD-SHELL", "wget -qO - ${HC_URL} | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
+        ["CMD-SHELL", "wget -qO - ${URL} | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
       interval: 10s
       retries: 30
       start_period: 30s
