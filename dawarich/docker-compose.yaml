@@ -1,3 +1,4 @@
+---
 services:
   dawarich_redis:
     image: redis:7.0-alpine
@@ -9,7 +10,7 @@ services:
       - /srv/dawarich/shared:/data
     restart: always
     healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -21,7 +22,8 @@ services:
     volumes:
       - /srv/dawarich/db_data:/var/lib/postgresql/data
       - /srv/dawarich/shared:/var/shared
-      # - ./postgresql.conf:/etc/postgresql/postgresql.conf # Optional, uncomment if you want to use a custom config
+      # Optional, uncomment if you want to use a custom config
+      # - ./postgresql.conf:/etc/postgresql/postgresql.conf 
     networks:
       - backend
     environment:
@@ -29,12 +31,13 @@ services:
       POSTGRES_PASSWORD: ${DAWARICH_DB_PASSWORD}
     restart: always
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DAWARICH_DB_USER} -d dawarich_development" ]
+      test: ["CMD-SHELL", "pg_isready -U ${DAWARICH_DB_USER} -d dawarich_development"]
       interval: 10s
       retries: 5
       start_period: 30s
       timeout: 10s
-    # command: postgres -c config_file=/etc/postgresql/postgresql.conf # Use custom config, uncomment if you want to use a custom config
+    # Use custom config, uncomment if you want to use a custom config
+    # command: postgres -c config_file=/etc/postgresql/postgresql.conf 
 
   dawarich_app:
     image: freikin/dawarich:latest
@@ -70,14 +73,15 @@ services:
       PROMETHEUS_EXPORTER_ENABLED: false
       PROMETHEUS_EXPORTER_HOST: 0.0.0.0
       PROMETHEUS_EXPORTER_PORT: 9394
-      ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+      ENABLE_TELEMETRY: false 
+      # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
     logging:
       driver: "json-file"
       options:
         max-size: "100m"
         max-file: "5"
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      test: ["CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
       interval: 10s
       retries: 30
       start_period: 30s
@@ -125,14 +129,15 @@ services:
       PROMETHEUS_EXPORTER_ENABLED: false
       PROMETHEUS_EXPORTER_HOST: dawarich_app
       PROMETHEUS_EXPORTER_PORT: 9394
-      ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+      ENABLE_TELEMETRY: false 
+      # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
     logging:
       driver: "json-file"
       options:
         max-size: "100m"
         max-file: "5"
     healthcheck:
-      test: [ "CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}" ]
+      test: ["CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
       interval: 10s
       retries: 30
       start_period: 30s
