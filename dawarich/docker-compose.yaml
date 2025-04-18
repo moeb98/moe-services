@@ -27,12 +27,12 @@ services:
     networks:
       - backend
     environment:
-      POSTGRES_USER: ${DAWARICH_DB_USER}
-      POSTGRES_PASSWORD: ${DAWARICH_DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     restart: always
     healthcheck:
       test:
-        ["CMD-SHELL", "pg_isready -U ${DAWARICH_DB_USER} -d dawarich_development"]
+        ["CMD-SHELL", "pg_isready -U ${DB_USER} -d dawarich_development"]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -62,8 +62,8 @@ services:
       RAILS_ENV: development
       REDIS_URL: redis://dawarich_redis:6379/0
       DATABASE_HOST: dawarich_db
-      DATABASE_USERNAME: ${DAWARICH_DB_USER}
-      DATABASE_PASSWORD: ${DAWARICH_DB_PASSWORD}
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
       DATABASE_NAME: dawarich_development
       MIN_MINUTES_SPENT_IN_CITY: 60
       APPLICATION_HOSTS: localhost
@@ -83,7 +83,7 @@ services:
         max-file: "5"
     healthcheck:
       test:
-        ["CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
+        ["CMD-SHELL", "wget -qO - ${HC_URL} | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
       interval: 10s
       retries: 30
       start_period: 30s
@@ -119,8 +119,8 @@ services:
       RAILS_ENV: development
       REDIS_URL: redis://dawarich_redis:6379/0
       DATABASE_HOST: dawarich_db
-      DATABASE_USERNAME: ${DAWARICH_DB_USER}
-      DATABASE_PASSWORD: ${DAWARICH_DB_PASSWORD}
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
       DATABASE_NAME: dawarich_development
       APPLICATION_HOSTS: localhost
       BACKGROUND_PROCESSING_CONCURRENCY: 10
