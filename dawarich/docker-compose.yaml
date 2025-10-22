@@ -1,7 +1,7 @@
 ---
 services:
   dawarich_redis:
-    image: redis:7.0-alpine
+    image: redis:7.4-alpine
     container_name: dawarich_redis
     command: redis-server
     networks:
@@ -15,6 +15,7 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
+
   dawarich_db:
     image: postgis/postgis:17-3.5-alpine
     shm_size: 1G
@@ -60,7 +61,8 @@ services:
     environment:
       SELF_HOSTED: "true"
       RAILS_ENV: development
-      REDIS_URL: redis://dawarich_redis:6379/0
+      # REDIS_URL: redis://dawarich_redis:6379/0
+      REDIS_URL: redis://dawarich_redis:6379
       DATABASE_HOST: dawarich_db
       DATABASE_USERNAME: ${DB_USER}
       DATABASE_PASSWORD: ${DB_PASSWORD}
@@ -70,12 +72,16 @@ services:
       TIME_ZONE: Europe/London
       APPLICATION_PROTOCOL: http
       PHOTON_API_HOST: 192.168.1.4:2322
+      # PHOTON_API_HOST: photon.komoot.io
+      # PHOTON_API_USE_HTTPS: true
       DISTANCE_UNIT: km
       PROMETHEUS_EXPORTER_ENABLED: false
       PROMETHEUS_EXPORTER_HOST: 0.0.0.0
       PROMETHEUS_EXPORTER_PORT: 9394
       ENABLE_TELEMETRY: false
       # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+      SIDEKIQ_USERNAME: ${SIDEKIQ_USERNAME}
+      SIDEKIQ_PASSWORD: ${SIDEKIQ_PASSWORD}
     logging:
       driver: "json-file"
       options:
@@ -117,7 +123,8 @@ services:
     environment:
       SELF_HOSTED: "true"
       RAILS_ENV: development
-      REDIS_URL: redis://dawarich_redis:6379/0
+      # REDIS_URL: redis://dawarich_redis:6379/0
+      REDIS_URL: redis://dawarich_redis:6379
       DATABASE_HOST: dawarich_db
       DATABASE_USERNAME: ${DB_USER}
       DATABASE_PASSWORD: ${DB_PASSWORD}
@@ -127,11 +134,15 @@ services:
       APPLICATION_PROTOCOL: http
       PHOTON_API_HOST: 192.168.1.4:2322
       # PHOTON_API_HOST: photon.komoot.io
+      # PHOTON_API_USE_HTTPS: true
       DISTANCE_UNIT: km
       PROMETHEUS_EXPORTER_ENABLED: false
       PROMETHEUS_EXPORTER_HOST: dawarich_app
       PROMETHEUS_EXPORTER_PORT: 9394
       ENABLE_TELEMETRY: false
+      STORE_GEODATA: "true"
+      # SIDEKIQ_USERNAME: ${SIDEKIQ_USERNAME}
+      # SIDEKIQ_PASSWORD: ${SIDEKIQ_PASSWORD}
       # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
     logging:
       driver: "json-file"
@@ -140,7 +151,8 @@ services:
         max-file: "5"
     healthcheck:
       test:
-        ["CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
+        # ["CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
+        ["CMD-SHELL", "pgrep -f sidekiq"]
       interval: 10s
       retries: 30
       start_period: 30s
