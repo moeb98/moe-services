@@ -3,5 +3,7 @@ services:
     image: nickfedor/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --disable-containers nextcloud-app nextcloud-db piwigo-app piwigo-db
+    environment:
+      WATCHTOWER_DISABLE_CONTAINERS:
+        nextcloud-app nextcloud-db piwigo-app piwigo-db
 
