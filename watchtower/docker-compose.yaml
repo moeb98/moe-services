@@ -6,3 +6,4 @@ services:
     environment:
       WATCHTOWER_DISABLE_CONTAINERS:
         nextcloud-app nextcloud-db piwigo-app piwigo-db
+      WATCHTOWER_SCHEDULE: 0 0 21 * * *
