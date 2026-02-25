@@ -1,0 +1,25 @@
+---
+services:
+    photon:
+        image: ghcr.io/rtuszik/photon-docker:latest
+        container_name: "photon-docker"
+        environment:
+            - UPDATE_STRATEGY=DISABLED
+            - UPDATE_INTERVAL=30d
+            - LOG_LEVEL=INFO # Options: DEBUG, INFO, ERROR
+            - BASE_URL=https://r2.koalasec.org/public
+            - FILE_URL=https://download1.graphhopper.com/public/photon-db-planet-1.0-latest.tar.bz2
+            - REGION=planet
+            - PUID=1000
+            - PGID=1000
+            - ENABLE_METRICS=true
+        volumes:
+            - /srv/photon/data:/photon/data
+        restart: unless-stopped
+        networks:
+            - backend
+        ports:
+            - "2322:2322"
+networks:
+  backend:
+    external: true
