@@ -6,7 +6,7 @@ services:
         environment:
             - UPDATE_STRATEGY=DISABLED
             - UPDATE_INTERVAL=30d
-            - LOG_LEVEL=INFO # Options: DEBUG, INFO, ERROR
+            - LOG_LEVEL=INFO  # Options: DEBUG, INFO, ERROR
             - BASE_URL=https://r2.koalasec.org/public
             - FILE_URL=https://download1.graphhopper.com/public/photon-db-planet-1.0-latest.tar.bz2
             - REGION=planet
@@ -21,5 +21,5 @@ services:
         ports:
             - "2322:2322"
 networks:
-  backend:
-    external: true
+    backend:
+        external: true
