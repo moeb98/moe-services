@@ -70,7 +70,7 @@ services:
       DATABASE_NAME: dawarich_development
       MIN_MINUTES_SPENT_IN_CITY: 60
       APPLICATION_HOSTS: localhost
-      TIME_ZONE: Europe/London
+      TIME_ZONE: Europe/Berlin
       APPLICATION_PROTOCOL: http
       PHOTON_API_HOST: 192.168.1.4:2322
       # PHOTON_API_HOST: photon.komoot.io
