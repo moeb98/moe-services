@@ -3,7 +3,12 @@ services:
   dawarich_redis:
     image: redis:7.4-alpine
     container_name: dawarich_redis
-    command: redis-server
+#    command: redis-server
+    command: >
+      redis-server
+      --save 900 1
+      --save 300 10
+      --appendonly no
     networks:
       - backend
     volumes:
