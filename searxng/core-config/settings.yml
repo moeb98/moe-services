@@ -103,8 +103,8 @@ server:
   # Is overwritten by ${SEARXNG_PUBLIC_INSTANCE}
   public_instance: false
 
-  # If your instance owns a /etc/searxng/settings.yml file, then set the following
-  # values there.
+  # If your instance owns a /etc/searxng/settings.yml file, 
+  # then set the following values there.
 
   secret_key: "L2jDQ09DmhuOvU87M8W7vFVM90xMA"  # overwritten by ${SEARXNG_SECRET}
   # Proxy image results through SearXNG. Is overwritten by ${SEARXNG_IMAGE_PROXY}
