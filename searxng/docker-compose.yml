@@ -1,0 +1,98 @@
+services:
+
+  valkey:
+    container_name: searxng-valkey
+    image: docker.io/valkey/valkey:9-alpine
+    command: valkey-server --save 30 1 --loglevel warning
+    restart: unless-stopped
+    networks:
+      - searxng
+    volumes:
+      - valkey-data:/data/
+#    cap_drop:
+#      - ALL
+#    cap_add:
+#      - SETGID
+#      - SETUID
+#      - DAC_OVERRIDE
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "1m"
+#        max-file: "1"
+
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    networks:
+      - searxng
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./core-config/:/etc/searxng/:Z
+      - core-data:/var/cache/searxng/
+#      - ./searxng:/etc/searxng:rw
+#    environment:
+#      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-localhost}/
+#      - UWSGI_WORKERS=${SEARXNG_UWSGI_WORKERS:-4}
+#      - UWSGI_THREADS=${SEARXNG_UWSGI_THREADS:-4}
+#    cap_drop:
+#      - ALL
+#    cap_add:
+#      - CHOWN
+#      - SETGID
+#      - SETUID
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "4m"
+#        max-file: "1"
+
+#  ollama:
+#    volumes:
+#      - ollama:/root/.ollama
+#    container_name: ollama
+#    pull_policy: always
+#    tty: true
+#    restart: unless-stopped
+#    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
+#    networks:
+#      - searxng
+#    ports:
+#      - "11434:11434"
+
+  openwebui:
+    container_name: openwebui
+    image: ghcr.io/open-webui/open-webui:main
+    restart: unless-stopped
+    networks:
+      - searxng
+    ports:
+      - "3030:8080"
+    environment:
+      - CORS_ALLOW_ORIGINS=*
+      - ENABLE_WEB_SEARCH=True
+      - WEB_SEARCH_ENGINE="searxng"
+      - WEB_SEARCH_RESULT_COUNT=2
+      - WEB_SEARCH_CONCURRENT_REQUESTS=5
+      - SEARXNG_QUERY_URL="http://searxng:8080/search?q=<query>"
+    depends_on:
+      - searxng
+#      - ollama
+    volumes:
+      - openwebui-data:/app/backend/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+
+networks:
+  searxng:
+
+volumes:
+  core-data:
+  valkey-data:
+  openwebui-data:
+#  ollama: { }
