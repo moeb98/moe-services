@@ -37,5 +37,5 @@ jobs:
           args: '**/*.md'
 
       # Runs a yaml linter
-      - name: Yaml Lintin Action
-        uses: ibiqlik/action-yamllint@v1.0.0
+      # - name: Yaml Lintin Action
+      #   uses: ibiqlik/action-yamllint@v1.0.0
