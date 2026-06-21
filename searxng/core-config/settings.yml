@@ -40,7 +40,7 @@ brand:
 search:
   # Filter results. 0: None, 1: Moderate, 2: Strict
   safe_search: 0
-  # Existing autocomplete backends: "360search", "baidu", "bing", 
+  # Existing autocomplete backends: "360search", "baidu", "bing",
   # "brave", "dbpedia", "duckduckgo", "google",
   # "yandex", "mwmbl", "naver", "seznam", "sogou", "startpage",
   # "swisscows", "quark", "qwant", "wikipedia" -
@@ -49,7 +49,7 @@ search:
   # minimun characters to type before autocompleter starts
   autocomplete_min: 4
   # backend for the favicon near URL in search results.
-  # Available resolvers: "allesedv", "duckduckgo", "google", "yandex" 
+  # Available resolvers: "allesedv", "duckduckgo", "google", "yandex"
   # - leave blank to turn it off by default.
   favicon_resolver: ""
   # Default search language - leave blank to detect from browser information or
@@ -103,11 +103,11 @@ server:
   # Is overwritten by ${SEARXNG_PUBLIC_INSTANCE}
   public_instance: false
 
-  # If your instance owns a /etc/searxng/settings.yml file, 
+  # If your instance owns a /etc/searxng/settings.yml file,
   # then set the following values there.
 
-  secret_key: "L2jDQ09DmhuOvU87M8W7vFVM90xMA"  # overwritten by ${SEARXNG_SECRET}
-  # Proxy image results through SearXNG. Is overwritten by ${SEARXNG_IMAGE_PROXY}
+  secret_key: "L2jDQ09DmhuOvU87M8W7vFVM90xMA" # overwritten by ${SEARXNG_SECRET}
+  # Proxy image results through SearXNG. Overwritten by ${SEARXNG_IMAGE_PROXY}
   image_proxy: false
   # 1.0 and 1.1 are supported
   http_protocol_version: "1.0"
