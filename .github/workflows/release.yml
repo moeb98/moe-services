@@ -39,9 +39,10 @@ jobs:
       # Runs a yaml linter
       - name: Yaml Lintin Action
         uses: ibiqlik/action-yamllint@v3.1.0
-        config_data: |
-        extends: default
-        rules:
-          line-length:
-            max: 80
-            level: warning
+        with:
+          config_data: |
+          extends: default
+          rules:
+            line-length:
+              max: 80
+              level: warning
