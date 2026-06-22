@@ -140,10 +140,10 @@ ui:
   default_theme: simple
   # center the results ?
   center_alignment: false
-  # URL prefix of the internet archive, don't forget trailing slash (if needed).
+  # URL prefix of the internet archive, don't forget trailing slash (if needed)
   # cache_url: "https://webcache.googleusercontent.com/search?q=cache:"
-  # Default interface locale - leave blank to detect from browser information or
-  # use codes from the 'locales' config section
+  # Default interface locale - leave blank to detect from browser information
+  # or use codes from the 'locales' config section
   default_locale: ""
   # Open result links in a new tab by default
   # results_on_new_tab: false
@@ -279,13 +279,13 @@ plugins:
 #   high_priority:
 #     - '(.*\.)?wikipedia.org$'
 #
-# Alternatively you can use external files for configuring 
+# Alternatively you can use external files for configuring
 # the "Hostnames plugin":
 #
 # hostnames:
 #  replace: 'rewrite-hosts.yml'
 #
-# Content of 'rewrite-hosts.yml' 
+# Content of 'rewrite-hosts.yml'
 # (place the file in the same directory as 'settings.yml'):
 # '(.*\.)?youtube\.com$': 'yt.example.com'
 # '(.*\.)?youtu\.be$': 'yt.example.com'
@@ -332,7 +332,9 @@ engines:
     categories: ["images"]
     # https://docs.searxng.org/dev/engines/online/adobe_stock.html
     adobe_order: relevance
-    adobe_content_types: ["photo", "illustration", "zip_vector", "template", "3d", "image"]
+    adobe_content_types: >
+      ["photo", "illustration", "zip_vector", "template", "3d", "image"]
+
     timeout: 6
     disabled: true
 
@@ -359,7 +361,8 @@ engines:
   - name: astrophysics data system
     engine: astrophysics_data_system
     shortcut: ads
-    # read https://docs.searxng.org/dev/engines/online/astrophysics_data_system.html
+    # read
+    # https://docs.searxng.org/dev/engines/online/astrophysics_data_system.html
     api_key: ""
     inactive: true
 
@@ -388,7 +391,7 @@ engines:
   #   engine: annas_archive
   #   shortcut: aaa
   #   # https://docs.searxng.org/dev/engines/online/annas_archive.html
-  #   aa_content: 'magazine' # book_fiction, book_unknown, book_nonfiction, book_comic
+  #   aa_content: 'magazine' # book_fiction, book_nonfiction, book_comic
   #   aa_ext: 'pdf'  # pdf, epub, ..
   #   aa_sort: oldest'  # newest, oldest, largest, smallest
 
@@ -644,12 +647,15 @@ engines:
   - name: cloudflareai
     engine: cloudflareai
     shortcut: cfai
-    # get api token and accont id from https://developers.cloudflare.com/workers-ai/get-started/rest-api/
+    # get api token and accont id from
+    # https://developers.cloudflare.com/workers-ai/get-started/rest-api/
     cf_account_id: 'your_cf_accout_id'
     cf_ai_api: 'your_cf_api'
-    # create your ai gateway by https://developers.cloudflare.com/ai-gateway/get-started/creating-gateway/
+    # create your ai gateway by
+    # https://developers.cloudflare.com/ai-gateway/get-started/creating-gateway/
     cf_ai_gateway: 'your_cf_ai_gateway_name'
-    # find the model name from https://developers.cloudflare.com/workers-ai/models/#text-generation
+    # find the model name from
+    # https://developers.cloudflare.com/workers-ai/models/#text-generation
     cf_ai_model: 'ai_model_name'
     # custom your preferences
     # cf_ai_model_display_name: 'Cloudflare AI'
@@ -676,7 +682,9 @@ engines:
     shortcut: cv
     categories: general
     paging: false
-    search_url: https://crowdview-next-js.onrender.com/api/search-v3?query={query}
+    search_url: >
+      https://crowdview-next-js.onrender.com/api/search-v3?query={query}
+
     results_query: results
     url_query: link
     title_query: title
@@ -756,7 +764,9 @@ engines:
     shortcut: es
     categories: general
     paging: true
-    search_url: https://encyclosearch.org/encyclosphere/search?q={query}&page={pageno}&resultsPerPage=15
+    search_url: >
+      https://encyclosearch.org/encyclosphere/search?q={query}&page={pageno}&resultsPerPage=15
+
     results_query: Results
     url_query: SourceURL
     title_query: Title
