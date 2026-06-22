@@ -279,13 +279,13 @@ plugins:
 #   high_priority:
 #     - '(.*\.)?wikipedia.org$'
 #
-# Alternatively you can use external files for configuring 
+# Alternatively you can use external files for configuring
 # the "Hostnames plugin":
 #
 # hostnames:
 #  replace: 'rewrite-hosts.yml'
 #
-# Content of 'rewrite-hosts.yml' 
+# Content of 'rewrite-hosts.yml'
 # (place the file in the same directory as 'settings.yml'):
 # '(.*\.)?youtube\.com$': 'yt.example.com'
 # '(.*\.)?youtu\.be$': 'yt.example.com'
@@ -361,7 +361,7 @@ engines:
   - name: astrophysics data system
     engine: astrophysics_data_system
     shortcut: ads
-    # read 
+    # read
     # https://docs.searxng.org/dev/engines/online/astrophysics_data_system.html
     api_key: ""
     inactive: true
