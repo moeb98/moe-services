@@ -37,5 +37,11 @@ jobs:
           args: '**/*.md'
 
       # Runs a yaml linter
-      # - name: Yaml Lintin Action
-      #   uses: ibiqlik/action-yamllint@v1.0.0
+      - name: Yaml Lintin Action
+        uses: ibiqlik/action-yamllint@v1.0.0
+        config_data: |
+        extends: default
+        rules:
+          line-length:
+            max: 80
+            level: warning
