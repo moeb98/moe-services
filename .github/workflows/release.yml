@@ -24,7 +24,7 @@ jobs:
     # Steps represent sequence of tasks that are executed as part of the job
     steps:
       # Checks-out your repo under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -38,8 +38,9 @@ jobs:
 
       # Runs a yaml linter
       - name: Yaml Lintin Action
-        uses: ibiqlik/action-yamllint@v3.1.0
+        uses: ibiqlik/action-yamllint@v3
         with:
+          file_or_dir: .
           config_data: |
           extends: default
           rules:
