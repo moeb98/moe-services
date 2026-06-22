@@ -38,7 +38,7 @@ jobs:
 
       # Runs a yaml linter
       - name: Yaml Lintin Action
-        uses: ibiqlik/action-yamllint@v1.0.0
+        uses: ibiqlik/action-yamllint@v3.1.0
         config_data: |
         extends: default
         rules:
