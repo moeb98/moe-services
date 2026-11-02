@@ -76,7 +76,7 @@ services:
       - WEB_SEARCH_ENGINE="searxng"
       - WEB_SEARCH_RESULT_COUNT=2
       - WEB_SEARCH_CONCURRENT_REQUESTS=5
-      - SEARXNG_QUERY_URL="http://searxng:8080/search?q=<query>"
+      - SEARXNG_QUERY_URL="http://searxng:8080/search?q=<query>&format=json"
     depends_on:
       - searxng
 #      - ollama
