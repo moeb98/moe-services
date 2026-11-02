@@ -1,7 +1,7 @@
 ---
 services:
   dawarich_redis:
-    image: redis:7.4-alpine
+    image: redis:8.4-alpine
     container_name: dawarich_redis
 #    command: redis-server
     command: >
@@ -16,7 +16,7 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 10s
+      interval: 30s
       retries: 5
       start_period: 30s
       timeout: 10s
@@ -39,7 +39,7 @@ services:
     healthcheck:
       test:
         ["CMD-SHELL", "pg_isready -U ${DB_USER} -d dawarich_development"]
-      interval: 10s
+      interval: 30s
       retries: 5
       start_period: 30s
       timeout: 10s
@@ -96,7 +96,7 @@ services:
     healthcheck:
       test:
         ["CMD-SHELL", "wget -qO - ${URL} | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
-      interval: 10s
+      interval: 30s
       retries: 30
       start_period: 30s
       timeout: 10s
@@ -160,7 +160,7 @@ services:
       test:
         # ["CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
         ["CMD-SHELL", "pgrep -f sidekiq"]
-      interval: 10s
+      interval: 30s
       retries: 30
       start_period: 30s
       timeout: 10s
