@@ -41,7 +41,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.wp.entrypoints=web-secure"
       - "traefik.http.routers.wp.rule=
-         Host(`${TLD}`) || Host(`${SD}`) || Host(`${ALTTLD}`)"
+         Host(`${TLD}`) || Host(`${SD}`)"
+#         Host(`${TLD}`) || Host(`${SD}`) || Host(`${ALTTLD}`)"
       - "traefik.http.routers.wp.tls=true"
       - "traefik.http.routers.wp.tls.certresolver=default"
       - "traefik.http.routers.wp.middlewares=
